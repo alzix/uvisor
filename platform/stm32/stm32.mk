@@ -17,8 +17,15 @@
 #
 ###########################################################################
 
-ARCH_CORE:=CORE_ARMv7M
-ARCH_MPU:=MPU_ARMv7M
+$(call clear_plat_cfg_vars)
 
-CONFIGURATIONS:= \
-	CONFIGURATION_BEETLE_CORTEX_M3_0x20000000_0x140
+PLAT_CFG_NAME:=stm32
+
+PLAT_CFG_ARCH_CORE:=CORE_ARMv7M
+PLAT_CFG_ARCH_MPU:=MPU_ARMv7M
+PLAT_CFG_MBEDOS_DIR:=TARGET_STM32F4
+PLAT_CFG_MBEDOS_CONFIG_DIR:=TARGET_M4
+PLAT_CFG_DEFINES:=-DCONFIGURATION_STM32_CORTEX_M4_0x10000000_0x0
+PLAT_CFG_FLAGS:=-mthumb -march=armv7-m
+
+$(call register_uvisor_platform)

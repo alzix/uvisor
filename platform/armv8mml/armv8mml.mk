@@ -1,6 +1,6 @@
 ###########################################################################
 #
-#  Copyright (c) 2013-2016, ARM Limited, All Rights Reserved
+#  Copyright (c) 2016, ARM Limited, All Rights Reserved
 #  SPDX-License-Identifier: Apache-2.0
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -17,8 +17,17 @@
 #
 ###########################################################################
 
-ARCH_CORE:=CORE_ARMv7M
-ARCH_MPU:=MPU_KINETIS
+$(call clear_plat_cfg_vars)
 
-CONFIGURATIONS:=\
-	CONFIGURATION_KINETIS_CORTEX_M4_0x1FFF0000
+PLAT_CFG_NAME:=armv8mml
+
+PLAT_CFG_ARCH_CORE:=CORE_ARMv8M
+PLAT_CFG_ARCH_MPU:=MPU_ARMv8M
+
+PLAT_CFG_MBEDOS_DIR:=TARGET_ARM_armv8mml_SOC
+PLAT_CFG_MBEDOS_CONFIG_DIR:=TARGET_M33
+
+PLAT_CFG_DEFINES:=-DCONFIGURATION_ARMv8MML_CORTEX_M33
+PLAT_CFG_FLAGS:=-mthumb -march=armv8-m.main -mcmse
+
+$(call register_uvisor_platform)

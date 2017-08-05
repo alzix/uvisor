@@ -1,6 +1,6 @@
 ###########################################################################
 #
-#  Copyright (c) 2013-2016, ARM Limited, All Rights Reserved
+#  Copyright (c) 2016-2017, Nuvoton, All Rights Reserved
 #  SPDX-License-Identifier: Apache-2.0
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -17,8 +17,16 @@
 #
 ###########################################################################
 
-ARCH_CORE:=CORE_ARMv7M
-ARCH_MPU:=MPU_ARMv7M
+$(call clear_plat_cfg_vars)
 
-CONFIGURATIONS:=\
-	CONFIGURATION_STM32_CORTEX_M4_0x10000000_0x0
+PLAT_CFG_NAME:=nuc472
+
+PLAT_CFG_ARCH_CORE:=CORE_ARMv7M
+PLAT_CFG_ARCH_MPU:=MPU_ARMv7M
+PLAT_CFG_MBEDOS_DIR:=nuc472
+PLAT_CFG_MBEDOS_CONFIG_DIR:=TARGET_M4
+PLAT_CFG_DEFINES:=-DCONFIGURATION_NUC472_CORTEX_M4_0x20000000_0x0
+PLAT_CFG_FLAGS:=-mthumb -march=armv7-m
+
+# skip compilation as uVisor does not fit into the target memory
+#$(call register_uvisor_platform)

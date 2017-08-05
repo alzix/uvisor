@@ -1,6 +1,6 @@
 ###########################################################################
 #
-#  Copyright (c) 2016-2017, Nuvoton, All Rights Reserved
+#  Copyright (c) 2013-2016, ARM Limited, All Rights Reserved
 #  SPDX-License-Identifier: Apache-2.0
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -17,8 +17,17 @@
 #
 ###########################################################################
 
-ARCH_CORE:=CORE_ARMv7M
-ARCH_MPU:=MPU_ARMv7M
+$(call clear_plat_cfg_vars)
 
-CONFIGURATIONS:=\
-	CONFIGURATION_M451_CORTEX_M4_0x20000000_0x0
+PLAT_CFG_NAME:=k64f
+
+PLAT_CFG_ARCH_CORE:=CORE_ARMv7M
+PLAT_CFG_ARCH_MPU:=MPU_KINETIS
+
+PLAT_CFG_MBEDOS_DIR:=TARGET_MCU_K64F
+PLAT_CFG_MBEDOS_CONFIG_DIR:=TARGET_M4
+
+PLAT_CFG_DEFINES:=-DCONFIGURATION_KINETIS_CORTEX_M4_0x1FFF0000
+PLAT_CFG_FLAGS:=-mthumb -march=armv7-m
+
+$(call register_uvisor_platform)

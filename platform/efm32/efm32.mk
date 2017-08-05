@@ -17,17 +17,41 @@
 #
 ###########################################################################
 
-ARCH_CORE:=CORE_ARMv7M
-ARCH_MPU:=MPU_ARMv7M
-
 # uVisor configurations for EFM32 devices
 # The M3_P1 configuration supports:
 #  - EFM32 Giant Gecko
 #  - EFM32 Leopard Gecko
 #  - EFM32 Jade Gecko
+
+$(call clear_plat_cfg_vars)
+
+PLAT_CFG_NAME:=efm32_m3
+
+PLAT_CFG_ARCH_CORE:=CORE_ARMv7M
+PLAT_CFG_ARCH_MPU:=MPU_ARMv7M
+
+PLAT_CFG_MBEDOS_DIR:=TARGET_EFM32
+PLAT_CFG_MBEDOS_CONFIG_DIR:=TARGET_M3
+
+PLAT_CFG_DEFINES:=-DCONFIGURATION_EFM32_CORTEX_M3_P1
+PLAT_CFG_FLAGS:=-mthumb -march=armv7-m
+
+$(call register_uvisor_platform)
+
 # The M4_P1 configuration supports:
 #  - EFM32 Wonder Gecko
 #  - EFM32 Pearl Gecko
-CONFIGURATIONS:=\
-	CONFIGURATION_EFM32_CORTEX_M3_P1 \
-	CONFIGURATION_EFM32_CORTEX_M4_P1
+$(call clear_plat_cfg_vars)
+
+PLAT_CFG_NAME:=efm32_m4
+
+PLAT_CFG_ARCH_CORE:=CORE_ARMv7M
+PLAT_CFG_ARCH_MPU:=MPU_ARMv7M
+
+PLAT_CFG_MBEDOS_DIR:=EFM32
+PLAT_CFG_MBEDOS_CONFIG_DIR:=TARGET_M4
+
+PLAT_CFG_DEFINES:=-DCONFIGURATION_EFM32_CORTEX_M4_P1
+PLAT_CFG_FLAGS:=-mthumb -march=armv7-m
+
+$(call register_uvisor_platform)
