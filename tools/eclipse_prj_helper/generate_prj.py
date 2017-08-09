@@ -93,10 +93,11 @@ def get_uvisor_elf_name(uvisor_dir, target):
 
 
 def patch_debug_launcher(workspace, target, toolchain, uvisor_dir):
-    old_launcher = os.path.join(workspace, target + '_pyocd_settings.launch')
+    old_launcher = os.path.join(workspace, 'eclipse-extras', target + '_pyocd_settings.launch')
     workspace_name = os.path.basename(workspace)
     new_launcher = os.path.join(
         workspace,
+        'eclipse-extras',
         'PyOCD_{target}_{name}.launch'.format(target=target, name=workspace_name)
     )
     os.rename(old_launcher, new_launcher)
