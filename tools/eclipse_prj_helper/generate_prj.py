@@ -21,8 +21,7 @@ import argparse
 import os
 import subprocess
 import string
-import xml.etree.ElementTree as ElementTree
-
+from lxml import etree as ElementTree
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -70,7 +69,7 @@ def patch_makefile(workspace, target, toolchain, uvisor_dir, importer_dir):
         makefile_template = string.Template(fh.read())
 
     # overwrite generated Makefile
-    with open(os.path.join(workspace, 'Makefile'), 'wt') as fh:
+    with open(os.path.join(workspace, 'eclipse-extras', 'eclipse.mk'), 'wt') as fh:
         fh.write(
             makefile_template.safe_substitute(
                 workspace_dir=workspace,
@@ -140,11 +139,42 @@ def find_importer_dir(workspace):
     raise Exception('mbed-os directory was not found under ' + workspace)
 
 
+def patch_cproject(workspace):
+    cproject_file = os.path.join(workspace, '.cproject')
+
+    tree = ElementTree.parse(cproject_file)
+
+    builder = tree.find(
+        ".//builder[@command='make']"
+    )
+    assert builder is not None
+    builder.set(
+        'arguments',
+        '-j --file ' + os.path.join(workspace, 'eclipse-extras', 'eclipse.mk')
+    )
+    tree.write(cproject_file, encoding = "UTF-8", xml_declaration=True)
+
+
 def main():
     parser = get_parser()
     args = parser.parse_args()
     workspace_path = os.path.abspath(args.workspace)
+
+    makefile = os.path.join(workspace_path, 'Makefile')
+
+    # if makefile exsists - copy it as it will be overwritten by mbed export
+    if os.path.isfile(makefile):
+        os.rename(makefile, makefile + '_backup')
+        do_restore = True
+    else:
+        do_restore = False
+
     subprocess.check_call(['mbed', 'export', '-m', args.target, '-i', args.ide], cwd=workspace_path)
+
+    if do_restore:  # restore the original make file
+        os.rename(makefile + '_backup', makefile)
+    else:  # remove auto-generated makefile as we do not need it
+        os.remove(makefile)
 
     importer_dir = find_importer_dir(workspace_path)
     uvisor_dir = os.path.join(importer_dir, 'TARGET_IGNORE/uvisor')
@@ -153,6 +183,8 @@ def main():
     patch_makefile(workspace_path, args.target, args.toolchain, uvisor_dir, importer_dir)
 
     patch_debug_launcher(workspace_path, args.target, args.toolchain, uvisor_dir)
+
+    patch_cproject(workspace_path)
 
 
 if __name__ == '__main__':
