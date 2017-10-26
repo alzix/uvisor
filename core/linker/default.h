@@ -107,6 +107,18 @@ ENTRY(main_entry)
 #endif /* defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* !defined(STACK_SIZE_NP) */
 
+/*
+ *   uVisor SRAM map:
+ * 
+ *                       |-------------UVISOR_SRAM_LENGTH_USED-------------------------|
+ *                       |                                                             |
+ *    |--------------UVISOR_SRAM_LENGTH_PROTECTED--------------------------------------|
+ *    |                  |                                                             |
+ *    |----SRAM_OFFSET---|------RAM_S-----|---------------STACK_S----------------------|
+ *    ^                                   |-TOTAL_STACK_SIZE_NP--|--TOTAL_STACK_SIZE---|
+ * SRAM_ORIGIN
+ */
+
 MEMORY
 {
   FLASH_NS (r x) : ORIGIN = (FLASH_ORIGIN + FLASH_OFFSET),
